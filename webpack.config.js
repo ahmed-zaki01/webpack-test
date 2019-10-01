@@ -16,7 +16,8 @@ module.exports = {
   devtool: 'source-map',
   output: {
     path: path.resolve(__dirname, "dist"),
-    
+    filename: "assets/js/[name].js",
+    chunkFilename: "assets/js/[name].[id].js",
   },
   devServer: {
     contentBase: './dist'
@@ -34,8 +35,45 @@ module.exports = {
           }
         }
       },
-
- 
+      {
+        test: /\.svg$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              emitFile: true,
+              name: 'images/[sha512:hash:base64:7].[ext]',
+              publicPath: '../',
+              outputPath: 'assets/',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              emitFile: true,
+              name: 'assets/images/[sha512:hash:base64:7].[ext]',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'fonts/[sha512:hash:base64:7].[ext]',
+              publicPath: '../',
+              outputPath: 'assets/',
+            }
+          }
+        ]
+      },
       {
         test: /\.(sa|sc|c)ss$/,
         exclude: /node_modules/,
@@ -97,5 +135,6 @@ module.exports = {
       $: "jquery", // Map jQuery to $
       jQuery: "jquery" // Add jQuery
     }),
+    
   ],
 };
